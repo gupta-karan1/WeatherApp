@@ -81,7 +81,6 @@ const UpcomingWeather = () => {
         source={require("../../assets/upcoming-background.jpg")}
         style={image}
       >
-        <Text style={{ color: "white" }}>Upcoming Weather</Text>
         <FlatList
           data={DATA}
           renderItem={renderItem}
@@ -95,7 +94,7 @@ const UpcomingWeather = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    // marginTop: StatusBar.currentHeight || 0, // for android to push the content below the status bar (if any)
     backgroundColor: "beige",
   },
 
