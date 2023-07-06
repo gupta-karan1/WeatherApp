@@ -4,11 +4,11 @@ import { Feather } from "@expo/vector-icons";
 import RowText from "../components/RowText";
 import { WeatherType } from "../utilities/WeatherType";
 
-const CurrentWeather = () => {
+const CurrentWeather = ({ weatherData }) => {
   const {
     wrapper,
     container,
-    temp,
+    tempStyles,
     feel,
     highLowWrapper,
     highLow,
@@ -16,16 +16,32 @@ const CurrentWeather = () => {
     description,
     message,
   } = styles;
+  // console.log(weatherData);
+  // console.log("hello");
+  const {
+    main: { temp, feels_like, temp_max, temp_min },
+    weather,
+  } = weatherData;
+  const weatherCondition = weather[0].main;
   return (
-    <SafeAreaView style={wrapper}>
+    <SafeAreaView
+      style={[
+        wrapper,
+        { backgroundColor: WeatherType[weatherCondition].backgroundColor },
+      ]}
+    >
       <View style={container}>
-        <Feather name="sun" size={100} color="black" />
-        <Text style={temp}>6</Text>
-        <Text style={feel}>Feels like 5</Text>
+        <Feather
+          name={WeatherType[weatherCondition].icon}
+          size={100}
+          color="white"
+        />
+        <Text style={tempStyles}>{temp}°</Text>
+        <Text style={feel}>{`Feels like ${feels_like}°`}</Text>
 
         <RowText
-          messageOne={"High: 8"}
-          messageTwo={"Low: 6"}
+          messageOne={`High: ${temp_max}°`}
+          messageTwo={`Low: ${temp_min}°`}
           containerStyles={highLowWrapper}
           messageOneStyles={highLow}
           messageTwoStyles={highLow}
@@ -33,8 +49,8 @@ const CurrentWeather = () => {
       </View>
 
       <RowText
-        messageOne={"It's sunny"}
-        messageTwo={WeatherType["Clear"].message}
+        messageOne={weather[0].description}
+        messageTwo={WeatherType[weatherCondition].message}
         containerStyles={bodyWrapper}
         messageOneStyles={description}
         messageTwoStyles={message}
@@ -54,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  temp: {
+  tempStyles: {
     color: "black",
     fontSize: 48,
   },
@@ -68,8 +84,9 @@ const styles = StyleSheet.create({
   },
   highLowWrapper: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "40%",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
   },
   bodyWrapper: {
     justifyContent: "flex-end",
